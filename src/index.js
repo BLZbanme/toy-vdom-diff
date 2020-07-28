@@ -25,22 +25,16 @@ let oldVnode = createElement("ul", {},
 let newVnode = createElement("ul", {}, 
     createElement('li', {
         style: {
+            background: 'pink'
+        },
+        key: 'E'
+    }, 'E'),
+    createElement('li', {
+        style: {
             background: 'green'
         },
         key: 'D'
     }, 'D'),
-    createElement('li', {
-        style: {
-            background: 'red'
-        },
-        key: 'A'
-    }, 'A'),
-    createElement('li', {
-        style: {
-            background: 'yellow'
-        },
-        key: 'B'
-    }, 'B'),
     createElement('li', {
         style: {
             background: 'blue'
@@ -49,16 +43,22 @@ let newVnode = createElement("ul", {},
     }, 'C'),
     createElement('li', {
         style: {
-            background: 'green'
+            background: 'yellow'
         },
-        key: 'E'
-    }, 'E')
+        key: 'B'
+    }, 'B'),
+    createElement('li', {
+        style: {
+            background: 'red'
+        },
+        key: 'A'
+    }, 'A'),
 )
 
 render(oldVnode, app);
 
 setTimeout(() => {
     patch(oldVnode, newVnode);
-}, 2000)
+}, 5000)
 
 console.log(oldVnode);

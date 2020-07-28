@@ -1,5 +1,3 @@
-import { createElement } from ".";
-
 export function render(vnode, container) {
     let ele = createDomElementVnode(vnode);
     container.appendChild(ele);
@@ -8,8 +6,6 @@ export function render(vnode, container) {
 function createDomElementVnode(vnode) {
     let {
         type,
-        props,
-        key,
         children,
         text
     } = vnode;
@@ -125,6 +121,8 @@ function keyMapByindex(oldChildren) {
 }
 
 function updateChildren(parent, oldChildren, newChildren) {
+    const map = keyMapByindex(oldChildren);
+    
     let oldStartIndex = 0;
     let oldStartVnode = oldChildren[0];
     let oldEndIndex = oldChildren.length - 1;
@@ -160,7 +158,7 @@ function updateChildren(parent, oldChildren, newChildren) {
         }
         else if (isSameVnode(oldStartVnode, newEndVnode)) {
             patch(oldStartVnode, newEndVnode);
-            parent.insertBefore(oldStartVnode.domElement, oldEndVnode.domElement.nextSiblings);
+            parent.insertBefore(oldStartVnode.domElement, oldEndVnode.domElement.nextSibling);
             oldStartVnode = oldChildren[++oldStartIndex];
             newEndVnode = newChildren[--newEndIndex];
         }
