@@ -121,7 +121,7 @@ function keyMapByindex(oldChildren) {
 }
 
 function updateChildren(parent, oldChildren, newChildren) {
-    const map = keyMapByindex(oldChildren);
+    let map;
     
     let oldStartIndex = 0;
     let oldStartVnode = oldChildren[0];
@@ -170,6 +170,10 @@ function updateChildren(parent, oldChildren, newChildren) {
         }
         else  {
             //暴力对比
+            if (!map) {
+                map = keyMapByindex(oldChildren);
+            }
+            
             let index = map[newStartIndex.key];
             if (!index) {
                 parent.insertBefore(createDomElementVnode(newStartVnode), oldStartVnode.domElement)
