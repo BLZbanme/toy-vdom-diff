@@ -137,8 +137,16 @@ function updateChildren(parent, oldChildren, newChildren) {
 
     //判断老的孩子和新的孩子 循环的时候谁先结束就停止
     while (oldStartIndex <= oldEndIndex && newStartIndex <= newEndIndex) {
+        if (!oldStartVnode) {
+            oldStartVnode = oldChildren[++oldStartIndex];
+        }
+        else if (!oldEndVnode) {
+            oldEndVnode = oldChildren[--oldEndIndex];
+        }
+        
         //如果标签和key相同接着往下走
-        if (isSameVnode(oldStartVnode, newStartVnode)) {
+        
+        else if (isSameVnode(oldStartVnode, newStartVnode)) {
             //标签相同比较属性
             patch(oldStartVnode, newStartVnode);
             //如果他们俩一样，分别往后走一位
@@ -169,8 +177,14 @@ function updateChildren(parent, oldChildren, newChildren) {
                 parent.insertBefore(createDomElementVnode(newStartVnode), oldStartVnode.domElement)
             }
             else {
-                
+                let toMoveNode = oldChildren[index];
+                patch(toMoveNode, newStartVnode);
+                parent.insertBefore(toMoveNode.domElement, oldStartVnode.domElement);
+                oldChildren[index] = undefined;
             }
+
+            //移动位置
+            newStartVnode = newChildren[++newStartIndex];
         }
     }
 
@@ -180,6 +194,14 @@ function updateChildren(parent, oldChildren, newChildren) {
             // parent.appendChild(createDomElementVnode(newChildren[i]));
             let beforeElement = newChildren[newEndIndex + 1] == null ? null : newChildren[newEndIndex + 1].domElement;
             parent.insertBefore(createDomElementVnode(newChildren[i]), beforeElement);
+        }
+    }
+    //判断中间的undefined
+    if (oldStartIndex <= oldEndIndex) {
+        for (let i = oldStartIndex; i <= oldEndIndex; i++) {
+            if (oldChildren[i]) {
+                parent.removeChild(oldChildren[i].domElement);
+            }
         }
     }
 }
